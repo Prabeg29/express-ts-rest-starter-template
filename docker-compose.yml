@@ -1,0 +1,63 @@
+version: "3.8"
+
+networks:
+  api:
+    driver: bridge
+
+services:
+  db:
+    image: mysql:latest
+    container_name: ${APP_NAME}_db
+    cap_add:
+      - SYS_NICE
+    command: --default-authentication-plugin=mysql_native_password
+    restart: on-failure
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./db-data:/var/lib/mysql
+    ports:
+      - ${MYSQL_PORT:-4306}:3306
+    networks:
+      - api
+  
+  test-db:
+    image: mysql:latest
+    container_name: ${APP_NAME}_test-db
+    cap_add:
+      - SYS_NICE
+    command: --default-authentication-plugin=mysql_native_password
+    restart: on-failure
+    environment:
+      MYSQL_DATABASE: ${DB_TEST_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${MYSQL_TEST_PORT:-2306}:3306
+    networks:
+      - api
+
+  adminer:
+    image: adminer
+    restart: always
+    ports: 
+      - 8080:8080
+    networks:
+      - api
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${APP_NAME}_image
+    container_name: ${APP_NAME}_app
+    depends_on:
+      - db
+    user: 1000:1000
+    working_dir: /home/express-ts-api
+    ports:
+      - '8848:8848'
+    volumes:
+      - ./:/home/express-ts-api/
+    networks:
+      - api
