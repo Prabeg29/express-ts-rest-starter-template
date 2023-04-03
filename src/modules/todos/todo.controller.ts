@@ -20,11 +20,19 @@ export class TodoController {
   /**
    * Fetch all the resources
    */
-  public index = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public index = async (
+    req: Request<unknown, unknown, unknown, {currentPage: string; perPage: string;}>, res: Response, next: NextFunction
+  ): Promise<void> => {
     try {
-      const todos = await this._getAllTodosUseCase.execute();
+      const { currentPage, perPage } = req.query;
+      const { data: todos, paginationInfo } = await this._getAllTodosUseCase.execute(currentPage, perPage);
 
-      res.status(StatusCodes.OK).json({ data: TodoMapper.toDtoCollection(todos) });
+      res.status(StatusCodes.OK).json({ 
+        meta: {
+          paginationInfo: paginationInfo
+        },
+        todos: TodoMapper.toDtoCollection(todos),
+      });
     } catch (err) {
       next(err);
     }

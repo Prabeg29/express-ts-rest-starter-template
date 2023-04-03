@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
 import { HttpException } from '@exceptions/http.exception';
-import { TodoRepositoryInterface } from '@modules/todos/knex-todo.repository';
+import { TodoRepositoryInterface } from '@modules/todos/repositories/knex-todo.repository';
 
 export class DeleteTodoUseCase {
   constructor(private readonly _todoRepository: TodoRepositoryInterface) {}

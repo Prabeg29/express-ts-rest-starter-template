@@ -1,4 +1,4 @@
-import knex from 'knex';
+import knex, { Knex } from 'knex';
 
 import logger from '@utils/logger';
 import knexConfig from '../knexfile';
@@ -18,3 +18,34 @@ export const refreshDatabase = async () => {
 };
 
 export default knexInstance;
+
+export interface PaginationInfo {
+  total: number;
+  perPage: number;
+  currentPage: number;
+  lastPage: number;
+  prevPage: number;
+  nextPage: number;
+}
+
+export const paginate = async <T>(queryBuilder: Knex.QueryBuilder, currentPage: number, perPage: number) => {
+  if (currentPage < 1) {
+    currentPage = 1;
+  }
+
+  const offSet = (currentPage - 1) * perPage;
+  const data = await queryBuilder.clone().limit(perPage).offset(offSet) as T[];
+  const total = (await queryBuilder.count('* as count').first()).count;
+  const lastPage = Math.ceil(total / perPage);
+
+  const paginationInfo: PaginationInfo = {
+    total,
+    perPage,
+    currentPage,
+    lastPage,
+    prevPage: currentPage > 1 ? currentPage - 1 : null,
+    nextPage: currentPage < lastPage ? currentPage + 1 : null,
+  };
+
+  return { data, paginationInfo };
+};

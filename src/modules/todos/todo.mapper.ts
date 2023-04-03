@@ -1,3 +1,4 @@
+import config from '@config';
 import { Todo, TodoDto, TodoDtoCollection, TodoInput } from '@modules/todos/todo.type';
 
 export default class TodoMapper {
@@ -19,6 +20,9 @@ export default class TodoMapper {
         createdAt  : todo.createdAt.toDateString(),
         updatedAt  : todo.updatedAt.toDateString(),
       },
+      meta: {
+        link: new URL(`${config.app.url}/api/todos/${todo.id}`),
+      }
     };
   }
 

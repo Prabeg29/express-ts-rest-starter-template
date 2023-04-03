@@ -1,5 +1,5 @@
 import { TodoInput } from '../todo.type';
-import { TodoRepositoryInterface } from '../knex-todo.repository';
+import { TodoRepositoryInterface } from '../repositories/knex-todo.repository';
 
 export class UpdateTodoUseCase {
   constructor(private readonly _todoRepository: TodoRepositoryInterface) {}

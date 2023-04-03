@@ -4,12 +4,12 @@ import knex from '../database';
 import { validate } from '@middlewares/validator';
 import { TodoController } from '@modules/todos/todo.controller';
 import { todoSchema } from '@modules/todos/validations/todo.schema';
-import { KnexTodoRepository } from '@modules/todos/knex-todo.repository';
 import { CreateTodoUseCase } from '@modules/todos/use-cases/create-todo.use-case';
 import { DeleteTodoUseCase } from '@modules/todos/use-cases/delete-todo.use.case';
 import { UpdateTodoUseCase } from '@modules/todos/use-cases/update-todo.use.case';
 import { GetOneTodoUseCase } from '@modules/todos/use-cases/get-one-todo.use.case';
 import { GetAllTodosUseCase } from '@modules/todos/use-cases/get-all-todos.use-case';
+import { KnexTodoRepository } from '@modules/todos/repositories/knex-todo.repository';
 
 
 const router = Router();
