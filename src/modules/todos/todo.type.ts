@@ -3,6 +3,7 @@ export interface Todo {
   title: string;
   description: string;
   isComplete: boolean;
+  dueDate: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,6 +16,7 @@ export interface TodoDto {
     title: string;
     description: string;
     isComplete: boolean;
+    dueDate: string;
     createdAt: string;
     updatedAt: string;
   },

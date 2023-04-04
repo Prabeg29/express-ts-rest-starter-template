@@ -2,14 +2,6 @@ import config from '@config';
 import { Todo, TodoDto, TodoDtoCollection, TodoInput } from '@modules/todos/todo.type';
 
 export default class TodoMapper {
-  public static toDomain(payload: any): TodoInput {
-    return {
-      title      : payload.title,
-      description: payload.description,
-      isComplete : payload.isComplete,
-    };
-  }
-
   public static toDto(todo: Todo): TodoDto {
     return {
       id        : todo.id,
@@ -17,6 +9,7 @@ export default class TodoMapper {
         title      : todo.title,
         description: todo.description,
         isComplete : todo.isComplete,
+        dueDate    : todo.dueDate.toDateString(),
         createdAt  : todo.createdAt.toDateString(),
         updatedAt  : todo.updatedAt.toDateString(),
       },

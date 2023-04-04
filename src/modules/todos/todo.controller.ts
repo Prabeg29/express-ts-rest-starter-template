@@ -2,6 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import { NextFunction, Request, Response } from 'express';
 
 import TodoMapper from '@modules/todos/todo.mapper';
+import { TodoInput } from '@modules/todos/todo.type';
 import { CreateTodoUseCase } from '@modules/todos/use-cases/create-todo.use-case';
 import { DeleteTodoUseCase } from '@modules/todos/use-cases/delete-todo.use.case';
 import { UpdateTodoUseCase } from '@modules/todos/use-cases/update-todo.use.case';
@@ -43,7 +44,7 @@ export class TodoController {
    */
   public store = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const todoId: number = await this._createTodoUseCase.execute(TodoMapper.toDomain(req.body));
+      const todoId: number = await this._createTodoUseCase.execute(req.body as TodoInput);
       const todo = await this._getOneTodoUseCase.execute(todoId);
   
       res.status(StatusCodes.CREATED).json({ data: TodoMapper.toDto(todo) });
@@ -70,7 +71,7 @@ export class TodoController {
    */
   public update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const todoId = await this._updateTodoUseCase.execute(parseInt(req.params.id), TodoMapper.toDomain(req.body));
+      const todoId = await this._updateTodoUseCase.execute(parseInt(req.params.id), req.body as TodoInput);
       const todo = await this._getOneTodoUseCase.execute(todoId);
 
       res.status(StatusCodes.OK).json({ data: TodoMapper.toDto(todo) });

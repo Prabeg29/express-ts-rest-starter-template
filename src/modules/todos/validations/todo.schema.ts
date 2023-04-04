@@ -4,7 +4,8 @@ export const todoSchema = {
     title      : { type: 'string', maxLength: 255, },
     description: { type: 'string', maxLength: 255, },
     isComplete : { type: 'boolean' },
+    dueDate    : { type: 'string', format: 'date' }
   },
-  required            : ['title'],
+  required            : [ 'title', 'dueDate' ],
   additionalProperties: false
 };
