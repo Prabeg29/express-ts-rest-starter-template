@@ -33,7 +33,7 @@ describe('UpdateTodoUseCase', () => {
           'dueDate'    : todosStub()[0].dueDate
         });
       });
-      it.skip('then should return the id of newly created todo', () => {
+      it('then should return the id of newly created todo', () => {
         expect(res).toBe(todosStub()[0].id);
       });
     });
@@ -54,7 +54,7 @@ describe('UpdateTodoUseCase', () => {
           'dueDate'    : todosStub()[0].dueDate
         });
       });
-      it.skip('then should return the id of updated todo', () => {
+      it('then should return the id of updated todo', () => {
         expect(res).toBe(todosStub()[0].id);
       });
     });
