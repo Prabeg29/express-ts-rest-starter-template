@@ -1,4 +1,4 @@
-import { todosStub } from '../__tests__/stubs/todo.stub';
+import { todosStub } from '../../__tests__/stubs/todo.stub';
 
 export const KnexTodoRepository = jest.fn().mockImplementation(() => {
   return {
