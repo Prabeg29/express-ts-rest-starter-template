@@ -16,7 +16,7 @@ export interface TodoDto {
     title: string;
     description: string;
     isComplete: boolean;
-    dueDate: string;
+    dueDate?: string;
     createdAt: string;
     updatedAt: string;
   },

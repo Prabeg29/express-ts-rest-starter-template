@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import knex from '../database';
 import { validate } from '@middlewares/validator';
+import { tryCatchWrapper } from '@utils/try-catch-wrapper';
 import { TodoController } from '@modules/todos/todo.controller';
 import { todoSchema } from '@modules/todos/validations/todo.schema';
 import { CreateTodoUseCase } from '@modules/todos/use-cases/create-todo.use-case';
@@ -22,10 +23,10 @@ const todoController: TodoController = new TodoController(
 
 );
 
-router.get('/', todoController.index);
-router.get('/:id', todoController.show);
-router.post('/', validate(todoSchema), todoController.store);
-router.put('/:id', validate(todoSchema), todoController.update);
-router.delete('/:id', todoController.destroy);
+router.get('/', tryCatchWrapper(todoController.index));
+router.get('/:id', tryCatchWrapper(todoController.show));
+router.post('/', validate(todoSchema), tryCatchWrapper(todoController.store));
+router.put('/:id', validate(todoSchema), tryCatchWrapper(todoController.update));
+router.delete('/:id', tryCatchWrapper(todoController.destroy));
 
 export default router;

@@ -5,8 +5,6 @@ import { dbTables } from '@enums/db-tables.enum';
 import { Todo, TodoInput } from '@modules/todos/todo.type';
 import { TodoRepositoryInterface } from './todo.repository.interface';
 
-
-
 export class KnexTodoRepository implements TodoRepositoryInterface {
   constructor(protected readonly knex: Knex) { }
 

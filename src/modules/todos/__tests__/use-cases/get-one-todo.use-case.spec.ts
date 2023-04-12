@@ -2,9 +2,9 @@ import knex from '../../../../database';
 import { Todo } from '@modules/todos/todo.type';
 import { todosStub } from '@modules/todos/__tests__/stubs/todo.stub';
 import { GetOneTodoUseCase } from '@modules/todos/use-cases/get-one-todo.use.case';
-import { TodoRepositoryInterface, KnexTodoRepository } from '@modules/todos/knex-todo.repository';
+import { TodoRepositoryInterface, KnexTodoRepository } from '@modules/todos/repositories/knex-todo.repository';
 
-jest.mock('@modules/todos/knex-todo.repository');
+jest.mock('@modules/todos/repositories/knex-todo.repository');
 
 describe('GetOneTodoUseCase', () => {
   let getOneTodoUseCase: GetOneTodoUseCase;

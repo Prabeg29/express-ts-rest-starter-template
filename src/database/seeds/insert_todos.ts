@@ -8,7 +8,8 @@ const createFakeTodo = (): TodoInput => {
   return {
     title      : faker.lorem.sentence(5),
     description: faker.lorem.sentence(10),
-    isComplete : faker.datatype.boolean()
+    isComplete : faker.datatype.boolean(),
+    dueDate    : faker.date.future(),
   };
 };
 

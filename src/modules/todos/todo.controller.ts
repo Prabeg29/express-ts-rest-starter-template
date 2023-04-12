@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 
 import TodoMapper from '@modules/todos/todo.mapper';
 import { TodoInput } from '@modules/todos/todo.type';
@@ -22,74 +22,54 @@ export class TodoController {
    * Fetch all the resources
    */
   public index = async (
-    req: Request<unknown, unknown, unknown, {currentPage: string; perPage: string;}>, res: Response, next: NextFunction
+    req: Request<unknown, unknown, unknown, {currentPage: string; perPage: string;}>, res: Response
   ): Promise<void> => {
-    try {
-      const { currentPage, perPage } = req.query;
-      const { data: todos, paginationInfo } = await this._getAllTodosUseCase.execute(currentPage, perPage);
+    const { currentPage, perPage } = req.query;
+    const { data: todos, paginationInfo } = await this._getAllTodosUseCase.execute(currentPage, perPage);
 
-      res.status(StatusCodes.OK).json({ 
-        meta: {
-          paginationInfo: paginationInfo
-        },
-        todos: TodoMapper.toDtoCollection(todos),
-      });
-    } catch (err) {
-      next(err);
-    }
+    res.status(StatusCodes.OK).json({ 
+      meta: {
+        paginationInfo: paginationInfo
+      },
+      todos: TodoMapper.toDtoCollection(todos),
+    });
   };
 
   /**
    * Save a new resource to the storage
    */
-  public store = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const todoId: number = await this._createTodoUseCase.execute(req.body as TodoInput);
-      const todo = await this._getOneTodoUseCase.execute(todoId);
-  
-      res.status(StatusCodes.CREATED).json({ data: TodoMapper.toDto(todo) });
-    } catch (err) {
-      next(err);
-    }
+  public store = async (req: Request, res: Response): Promise<void> => {
+    const todoId: number = await this._createTodoUseCase.execute(req.body as TodoInput);
+    const todo = await this._getOneTodoUseCase.execute(todoId);
+
+    res.status(StatusCodes.CREATED).json({ data: TodoMapper.toDto(todo) });
   };
   
   /**
    * Fetch the resource referenced by the identifier 
    */
-  public show  = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const todo = await this._getOneTodoUseCase.execute(parseInt(req.params.id));
+  public show  = async (req: Request, res: Response): Promise<void> => {
+    const todo = await this._getOneTodoUseCase.execute(parseInt(req.params.id));
 
-      res.status(StatusCodes.OK).json({ data: TodoMapper.toDto(todo) });
-    } catch (err) {
-      next(err);
-    }
+    res.status(StatusCodes.OK).json({ data: TodoMapper.toDto(todo) });
   };
 
   /**
    * Update the resource referenced by the identifier 
    */
-  public update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const todoId = await this._updateTodoUseCase.execute(parseInt(req.params.id), req.body as TodoInput);
-      const todo = await this._getOneTodoUseCase.execute(todoId);
+  public update = async (req: Request, res: Response): Promise<void> => {
+    const todoId = await this._updateTodoUseCase.execute(parseInt(req.params.id), req.body as TodoInput);
+    const todo = await this._getOneTodoUseCase.execute(todoId);
 
-      res.status(StatusCodes.OK).json({ data: TodoMapper.toDto(todo) });
-    } catch (err) {
-      next(err);
-    }
+    res.status(StatusCodes.OK).json({ data: TodoMapper.toDto(todo) });
   };
 
   /**
    * Remove the resource referenced by the identifier from the storage
    */
-  public destroy = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      await this._deleteTodoUseCase.execute(parseInt(req.params.id));
+  public destroy = async (req: Request, res: Response,): Promise<void> => {
+    await this._deleteTodoUseCase.execute(parseInt(req.params.id));
 
-      res.status(StatusCodes.OK).json({ message: 'Todo deleted' });
-    } catch (err) {
-      next(err);
-    }
+    res.status(StatusCodes.OK).json({ message: 'Todo deleted' });
   };
 }

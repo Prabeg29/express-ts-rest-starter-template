@@ -13,7 +13,7 @@ export class DeleteTodoUseCase {
       throw new HttpException('Todo not found', StatusCodes.NOT_FOUND);
     }
 
-    const result = this._todoRepository.delete(todo.id);
+    const result = await this._todoRepository.delete(todo.id);
 
     if (!result) {
       throw new Error('Todo not deleted');

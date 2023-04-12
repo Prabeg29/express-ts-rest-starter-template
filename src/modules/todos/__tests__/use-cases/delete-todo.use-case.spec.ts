@@ -2,9 +2,9 @@ import knex from '../../../../database';
 import { Todo } from '@modules/todos/todo.type';
 import { todosStub } from '@modules/todos/__tests__/stubs/todo.stub';
 import { DeleteTodoUseCase } from '@modules/todos/use-cases/delete-todo.use.case';
-import { TodoRepositoryInterface, KnexTodoRepository } from '@modules/todos/knex-todo.repository';
+import { TodoRepositoryInterface, KnexTodoRepository } from '@modules/todos/repositories/knex-todo.repository';
 
-jest.mock('@modules/todos/knex-todo.repository');
+jest.mock('@modules/todos/repositories/knex-todo.repository');
 
 describe('DeleteTodoUseCase', () => {
   let deleteTodoUseCase: DeleteTodoUseCase;
@@ -46,7 +46,7 @@ describe('DeleteTodoUseCase', () => {
         .spyOn(todoRepository, 'getOne')
         .mockImplementation(() => Promise.resolve(todosStub()[0]));
     });
-    describe('When getOneTodo is called', () => {
+    describe('When deleteTodo is called', () => {
       beforeEach(async () => {
         res = await deleteTodoUseCase.execute(todosStub()[0].id);
       });

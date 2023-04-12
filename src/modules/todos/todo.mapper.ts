@@ -9,7 +9,7 @@ export default class TodoMapper {
         title      : todo.title,
         description: todo.description,
         isComplete : todo.isComplete,
-        dueDate    : todo.dueDate.toDateString(),
+        dueDate    : todo.dueDate?.toDateString(),
         createdAt  : todo.createdAt.toDateString(),
         updatedAt  : todo.updatedAt.toDateString(),
       },
