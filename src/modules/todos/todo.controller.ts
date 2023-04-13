@@ -51,7 +51,7 @@ export class TodoController {
   public show  = async (req: Request, res: Response): Promise<void> => {
     const todo = await this._getOneTodoUseCase.execute(parseInt(req.params.id));
 
-    res.status(StatusCodes.OK).json({ data: TodoMapper.toDto(todo) });
+    res.status(StatusCodes.OK).json({ todo: TodoMapper.toDto(todo) });
   };
 
   /**
