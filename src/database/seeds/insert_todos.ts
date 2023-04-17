@@ -16,11 +16,11 @@ const createFakeTodo = (): TodoInput => {
 export async function seed(knex: Knex): Promise<void> {
   const todos: Array<TodoInput> = [];
 
-  Array.from({ length: 500000 }).forEach(() => {
+  Array.from({ length: 10000 }).forEach(() => {
     todos.push(createFakeTodo());
   });
 
   await knex(dbTables.TODOS).del();
 
-  await knex(dbTables.TODOS).insert(todos);
+  await knex.batchInsert(dbTables.TODOS, todos, 1000);
 }

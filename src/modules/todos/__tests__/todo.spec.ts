@@ -1,8 +1,8 @@
 import { Server } from 'http';
 import request from 'supertest';
+import { StatusCodes } from 'http-status-codes';
 
 import { App } from '../../../app';
-import { StatusCodes } from 'http-status-codes';
 import { refreshDatabase } from '../../../database';
 
 describe('Todo APIs', () => {
@@ -21,18 +21,25 @@ describe('Todo APIs', () => {
 
   describe('GET: /api/todos', () => {
     it.only('should return list of todos', async () => {
+      const currentPage = 1;
       const perPage = 25;
 
       response = await request(server)
-        .get(`/api/todos?currentPage=1&perPage=${perPage}`)
+        .get(`/api/todos?currentPage=${currentPage}&perPage=${perPage}`)
         .set('Accept', 'application/json');
-
-      console.log(JSON.stringify(response.body.meta, null, 2));
   
       expect(response.status).toEqual(StatusCodes.OK);
       expect(response.body).toHaveProperty('meta');
       expect(response.body).toHaveProperty('todos');
       expect(response.body.meta).toHaveProperty('paginationInfo');
+      expect(response.body.meta.paginationInfo).toEqual({
+        total      : 10000,
+        perPage    : perPage,
+        currentPage: currentPage,
+        lastPage   : Math.ceil(10000/perPage),
+        prevPage   : null,
+        nextPage   : 2
+      });
       expect(response.body.todos.length).toEqual(perPage);
     });
   });
