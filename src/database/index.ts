@@ -9,7 +9,6 @@ export const refreshDatabase = async () => {
   try {
     await knexInstance.migrate.rollback({}, true);
     await knexInstance.migrate.latest();
-    await knexInstance.seed.run();
 
     logger.info('Database refreshed');
   } catch (err) {
