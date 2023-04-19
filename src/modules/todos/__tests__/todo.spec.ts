@@ -23,7 +23,7 @@ describe('Todo APIs', () => {
     const currentPage = 1;
     const perPage = 25;
 
-    it('should return list of todos when there are todos', async () => {
+    it('should return list of paginated todos when there are todos', async () => {
       await knexInstance.seed.run();
 
       response = await request(server)
@@ -98,6 +98,22 @@ describe('Todo APIs', () => {
         updatedAt  : expect.any(String)
       });
       expect(response.body.todo.meta.link).toEqual(`http://localhost:8848/api/todos/${id}`);
+    });
+  });
+
+  describe('POST: /api/todos', () => {
+    const invalidSignupPayloadSet = [
+      // empty payload
+      {},
+    ];
+
+    it.each(invalidSignupPayloadSet)('should throw validation errors', async (invalidSignupPayload) => {
+      response = await request(server)
+        .post('/api/todos')
+        .set('Accept', 'application/json')
+        .send(invalidSignupPayload);
+
+      expect(response.status).toEqual(422);
     });
   });
 });

@@ -1,5 +1,5 @@
 import config from '@config';
-import { Todo, TodoDto, TodoDtoCollection, TodoInput } from '@modules/todos/todo.type';
+import { Todo, TodoDto, TodoDtoCollection } from '@modules/todos/todo.type';
 
 export default class TodoMapper {
   public static toDto(todo: Todo): TodoDto {
