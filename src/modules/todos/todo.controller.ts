@@ -42,7 +42,7 @@ export class TodoController {
     const todoId: number = await this._createTodoUseCase.execute(req.body as TodoInput);
     const todo = await this._getOneTodoUseCase.execute(todoId);
 
-    res.status(StatusCodes.CREATED).json({ data: TodoMapper.toDto(todo) });
+    res.status(StatusCodes.CREATED).json({ todo: TodoMapper.toDto(todo) });
   };
   
   /**

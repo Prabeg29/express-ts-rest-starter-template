@@ -107,13 +107,40 @@ describe('Todo APIs', () => {
       {},
     ];
 
-    it.each(invalidSignupPayloadSet)('should throw validation errors', async (invalidSignupPayload) => {
+    it.each(invalidSignupPayloadSet)('should throw validation errors', async (invalidPayload) => {
       response = await request(server)
         .post('/api/todos')
         .set('Accept', 'application/json')
-        .send(invalidSignupPayload);
+        .send(invalidPayload);
 
       expect(response.status).toEqual(422);
+    });
+
+    it('should create a new todo resource', async () => {
+      const validTodoPayload = {
+        title      : 'SIP payment',
+        description: 'Pay your SIP amount',
+        isComplete : false,
+        dueDate    : '2023-04-22'
+      };
+
+      response = await request(server)
+        .post('/api/todos')
+        .set('Accept', 'application/json')
+        .send(validTodoPayload);
+
+      expect(response.status).toEqual(201);
+      expect(response.body).toHaveProperty('todo');
+      expect(response.body.todo.id).toEqual(expect.any(Number));
+      expect(response.body.todo.attributes).toEqual({
+        title      : validTodoPayload.title,
+        description: validTodoPayload.description,
+        isComplete : 0,
+        dueDate    : new Date(validTodoPayload.dueDate).toDateString(),
+        createdAt  : expect.any(String),
+        updatedAt  : expect.any(String)
+      });
+      expect(response.body.todo.meta.link).toEqual('http://localhost:8848/api/todos/1');
     });
   });
 });
