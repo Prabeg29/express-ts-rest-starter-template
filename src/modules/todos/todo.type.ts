@@ -20,9 +20,6 @@ export interface TodoDto {
     createdAt: string;
     updatedAt: string;
   },
-  meta: {
-    link: URL
-  }
 }
 
 export type TodoDtoCollection = TodoDto[];

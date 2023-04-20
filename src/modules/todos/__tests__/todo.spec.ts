@@ -97,7 +97,6 @@ describe('Todo APIs', () => {
         createdAt  : expect.any(String),
         updatedAt  : expect.any(String)
       });
-      expect(response.body.todo.meta.link).toEqual(`http://localhost:8848/api/todos/${id}`);
     });
   });
 
@@ -140,7 +139,6 @@ describe('Todo APIs', () => {
         createdAt  : expect.any(String),
         updatedAt  : expect.any(String)
       });
-      expect(response.body.todo.meta.link).toEqual('http://localhost:8848/api/todos/1');
     });
   });
 
@@ -185,7 +183,6 @@ describe('Todo APIs', () => {
         createdAt  : expect.any(String),
         updatedAt  : expect.any(String)
       });
-      expect(response.body.todo.meta.link).toEqual('http://localhost:8848/api/todos/1');
     });
 
     it('should create a new todo if does not exists', async () => {
@@ -212,7 +209,6 @@ describe('Todo APIs', () => {
         createdAt  : expect.any(String),
         updatedAt  : expect.any(String)
       });
-      expect(response.body.todo.meta.link).toEqual('http://localhost:8848/api/todos/1');
     });
   });
 });

@@ -12,14 +12,18 @@ export default class TodoMapper {
         dueDate    : todo.dueDate?.toDateString(),
         createdAt  : todo.createdAt.toDateString(),
         updatedAt  : todo.updatedAt.toDateString(),
-      },
-      meta: {
-        link: new URL(`${config.app.url}/api/todos/${todo.id}`),
       }
     };
   }
 
   public static toDtoCollection(todos: Todo[]): TodoDtoCollection {
-    return todos.map(todo => TodoMapper.toDto(todo));
+    return todos.map(todo => {
+      return {
+        ...TodoMapper.toDto(todo),
+        meta: {
+          link: new URL(`${config.app.url}/api/todos/${todo.id}`),
+        }
+      };
+    });
   }
 }
