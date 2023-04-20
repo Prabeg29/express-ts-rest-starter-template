@@ -61,7 +61,7 @@ export class TodoController {
     const todoId = await this._updateTodoUseCase.execute(parseInt(req.params.id), req.body as TodoInput);
     const todo = await this._getOneTodoUseCase.execute(todoId);
 
-    res.status(StatusCodes.OK).json({ data: TodoMapper.toDto(todo) });
+    res.status(StatusCodes.OK).json({ todo: TodoMapper.toDto(todo) });
   };
 
   /**
