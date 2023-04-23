@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rimraf lib && npx tsc -p .",
     "start:dev": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/index.ts",
-    "start:prod": "npm run build && node ./lib/index.js",
+    "start:prod": "yarn build && node ./lib/index.js",
     "knex": "node_modules/.bin/knex",
     "make:migration": "yarn knex migrate:make --knexfile src/knexfile.ts",
     "migrate": "yarn knex migrate:latest --knexfile src/knexfile.ts",
