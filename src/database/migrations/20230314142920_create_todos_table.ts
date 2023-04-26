@@ -7,7 +7,8 @@ export async function up(knex: Knex): Promise<void> {
     table.increments();
 
     table.string('title').notNullable();
-    table.text('description').nullable();
+    table.string('description',1000).nullable();
+    table.timestamp('dueDate').notNullable();
     table.boolean('isComplete').defaultTo(false);
 
     table.timestamps(true, true, true);

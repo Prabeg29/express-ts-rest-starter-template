@@ -9,14 +9,14 @@ const createFakeTodo = (): TodoInput => {
     title      : faker.lorem.sentence(5),
     description: faker.lorem.sentence(10),
     isComplete : faker.datatype.boolean(),
-    dueDate    : faker.date.future(),
+    dueDate    : faker.date.soon(14),
   };
 };
 
 export async function seed(knex: Knex): Promise<void> {
   const todos: Array<TodoInput> = [];
 
-  Array.from({ length: 10000 }).forEach(() => {
+  Array.from({ length: 999999 }).forEach(() => {
     todos.push(createFakeTodo());
   });
 
