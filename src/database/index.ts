@@ -34,7 +34,7 @@ export const paginate = async <T>(queryBuilder: Knex.QueryBuilder, currentPage: 
 
   const offSet = (currentPage - 1) * perPage;
   const data = await queryBuilder.clone().limit(perPage).offset(offSet) as T[];
-  const total = (await queryBuilder.count('* as count').first()).count;
+  const total = (await queryBuilder.count('id as count').first()).count;
   const lastPage = Math.ceil(total / perPage);
 
   const paginationInfo: PaginationInfo = {
