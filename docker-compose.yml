@@ -37,14 +37,6 @@ services:
     networks:
       - api
 
-  adminer:
-    image: adminer
-    restart: always
-    ports: 
-      - 8080:8080
-    networks:
-      - api
-
   app:
     build:
       context: .
