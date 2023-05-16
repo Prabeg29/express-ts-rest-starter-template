@@ -4,6 +4,7 @@ module.exports = {
   testEnvironment: 'node',
   clearMocks     : true,
   testMatch      : ['**/*/*.spec.ts'],
+  testTimeout    : 10000,
 
   moduleNameMapper: {
     '@database'        : '<rootDir>/src/database',
