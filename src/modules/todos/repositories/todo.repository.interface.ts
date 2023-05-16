@@ -1,9 +1,10 @@
 import { PaginationInfo } from '@database';
 import { Todo, TodoInput } from '../todo.type';
+import { getAllTodosParams } from '@modules/todos/interfaces/get-all-todos-params.interface';
 
 export interface TodoRepositoryInterface {
   getOne(id: number): Promise<Todo | undefined>;
-  getAllPaginated(currentPage: number, perPage: number): Promise<{
+  getAllPaginated({ currentPage, perPage, start, end }: getAllTodosParams): Promise<{
     data: Todo[];
     paginationInfo: PaginationInfo;
   }>;

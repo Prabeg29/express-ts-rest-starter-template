@@ -4,6 +4,7 @@ import { paginate, PaginationInfo } from '../../../database';
 import { dbTables } from '@enums/db-tables.enum';
 import { Todo, TodoInput } from '@modules/todos/todo.type';
 import { TodoRepositoryInterface } from './todo.repository.interface';
+import { getAllTodosParams } from '../interfaces/get-all-todos-params.interface';
 
 export class KnexTodoRepository implements TodoRepositoryInterface {
   constructor(protected readonly knex: Knex) { }
@@ -12,13 +13,16 @@ export class KnexTodoRepository implements TodoRepositoryInterface {
     return await this.knex<Todo>(dbTables.TODOS).where('id', id).first();
   }
 
-  async getAllPaginated(currentPage: number, perPage: number): Promise<{
+  async getAllPaginated(
+    { currentPage, perPage, start, end }: getAllTodosParams): Promise<{
     data: Todo[];
     paginationInfo: PaginationInfo;
   }> {
-    const query = this.knex<Todo>(dbTables.TODOS).select();
+    const query = this.knex<Todo>(dbTables.TODOS)
+      .whereBetween('dueDate', [start, end])
+      .select();
 
-    return await paginate<Todo>(query, currentPage, perPage);
+    return await paginate<Todo>(query, Number(currentPage), Number(perPage));
   }
 
   async create(todo: TodoInput): Promise<number[]> {
@@ -33,5 +37,3 @@ export class KnexTodoRepository implements TodoRepositoryInterface {
     return await this.knex(dbTables.TODOS).where('id', id).del();
   }
 }
-export { TodoRepositoryInterface };
-
