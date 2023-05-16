@@ -2,23 +2,22 @@ import { StatusCodes } from 'http-status-codes';
 import { Request, Response } from 'express';
 
 import TodoMapper from '@modules/todos/todo.mapper';
-import { pagination } from '@enums/pagination.enum';
-import { TodoRepositoryInterface } from '@modules/todos/repositories/todo.repository.interface';
+import { GetAllTodosUseCase } from '@modules/todos/use-cases/get-all-todos.use-case';
+import { getAllTodosParams } from '@modules/todos/interfaces/get-all-todos-params.interface';
 
 export class GetAllTodosController {
-  constructor(private readonly _todoRepository: TodoRepositoryInterface) {}
+  constructor(private readonly _getAllTodosUseCase: GetAllTodosUseCase) {}
 
   public execute = async (
-    req: Request<unknown, unknown, unknown, {currentPage: string; perPage: string;}>, res: Response
+    req: Request<unknown, unknown, unknown, getAllTodosParams>, res: Response
   ): Promise<void> => {
-    const { currentPage, perPage } = req.query;
+    const { currentPage, perPage, interval } = req.query;
 
-    const currentPageNumber = currentPage ? Number(currentPage) : pagination.DEFAULT_PAGE;
-    const perPageNumber = perPage ? Number(perPage) : pagination.DEFAULT_RECORDS_PER_PAGE;
-
-    const { data: todos, paginationInfo } = await this._todoRepository.getAllPaginated(
-      currentPageNumber, perPageNumber
-    );
+    const { data: todos, paginationInfo } = await this._getAllTodosUseCase.execute({
+      currentPage: String(currentPage),
+      perPage    : String(perPage),
+      interval   : interval
+    });
 
     res.status(StatusCodes.OK).json({ 
       meta: {
