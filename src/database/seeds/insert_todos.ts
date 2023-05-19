@@ -16,7 +16,7 @@ const createFakeTodo = (): TodoInput => {
 export async function seed(knex: Knex): Promise<void> {
   const todos: Array<TodoInput> = [];
 
-  Array.from({ length: 999999 }).forEach(() => {
+  Array.from({ length: 1000 }).forEach(() => {
     todos.push(createFakeTodo());
   });
 
