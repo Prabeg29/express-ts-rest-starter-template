@@ -28,6 +28,6 @@ export class LabelController {
     const [labelId] = await this._labelRepository.create(req.body as LabelInput);
     label =  await this._labelRepository.getOne(labelId);
 
-    res.status(StatusCodes.OK).json({ label: LabelMapper.toDto(label)});
+    res.status(StatusCodes.CREATED).json({ label: LabelMapper.toDto(label)});
   };
 }

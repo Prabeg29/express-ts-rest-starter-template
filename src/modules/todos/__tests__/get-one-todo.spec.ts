@@ -6,18 +6,15 @@ import { App } from '../../../app';
 import knexInstance, { refreshDatabase } from '../../../database';
 
 describe('Todo APIs', () => {
-  let server: Server;
+  const server: Server = (new App()).listen(3000);
   let response: request.Response;
-
   const id = 5454;
   
   beforeEach(async () => {
-    server = (new App()).listen(3000);
     await refreshDatabase();
-    jest.clearAllMocks();
   });
 
-  afterEach(() => {
+  afterAll(() => {
     server.close();
   });
 

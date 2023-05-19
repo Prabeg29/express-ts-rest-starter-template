@@ -13,8 +13,9 @@ export class GetAllTodosUseCase {
     data: Todo[];
     paginationInfo: PaginationInfo;
   }>{
-    const currentPageNumber = !isNaN(Number(currentPage)) ? Number(currentPage) : pagination.DEFAULT_PAGE;
-    const perPageNumber = !isNaN(Number(currentPage)) ? Number(perPage) : pagination.DEFAULT_RECORDS_PER_PAGE;
+    currentPage = Number(currentPage)|| pagination.DEFAULT_PAGE;
+    perPage = Number(perPage) || pagination.DEFAULT_RECORDS_PER_PAGE;
+    interval = interval || 'today';
 
     const now = DateTime.local();
 
@@ -34,10 +35,10 @@ export class GetAllTodosUseCase {
     };
 
     return await this._todoRepository.getAllPaginated({
-      currentPage: currentPageNumber,
-      perPage    : perPageNumber,
-      start      : intervals[interval as keyof typeof intervals]['start'],
-      end        : intervals[interval as keyof typeof intervals]['end'] 
+      currentPage,
+      perPage,
+      start: intervals[interval as keyof typeof intervals]['start'],
+      end  : intervals[interval as keyof typeof intervals]['end'],
     });
   }
 }

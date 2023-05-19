@@ -1,5 +1,6 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
+import type {Config} from 'jest';
+
+const config: Config = {
   preset         : 'ts-jest',
   testEnvironment: 'node',
   clearMocks     : true,
@@ -17,3 +18,5 @@ module.exports = {
     '@enums/(.*)'      : '<rootDir>/src/enums/$1',
   },
 };
+
+export default config;
