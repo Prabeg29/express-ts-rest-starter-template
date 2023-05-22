@@ -9,6 +9,7 @@ export interface TodoRepositoryInterface {
     paginationInfo: PaginationInfo;
   }>;
   create(todo: TodoInput): Promise<number[]>;
+  createWithLabel(todo: TodoInput, labelIds: Array<number>): Promise<number>;
   update(id: number, todo: TodoInput): Promise<boolean>;
   delete(id: number): Promise<number>;
 }

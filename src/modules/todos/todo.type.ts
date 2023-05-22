@@ -8,7 +8,7 @@ export interface Todo {
   updatedAt: Date;
 }
 
-export type TodoInput = Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>;
+export type TodoInput = Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>; 
 
 export interface TodoDto {
   id: number;
@@ -16,7 +16,7 @@ export interface TodoDto {
     title: string;
     description: string;
     isComplete: boolean;
-    dueDate?: string;
+    dueDate: string;
     createdAt: string;
     updatedAt: string;
   },

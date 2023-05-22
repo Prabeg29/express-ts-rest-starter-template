@@ -5,6 +5,7 @@ import { dbTables } from '@enums/db-tables.enum';
 import { Todo, TodoInput } from '@modules/todos/todo.type';
 import { TodoRepositoryInterface } from './todo.repository.interface';
 import { getAllTodosParams } from '../interfaces/get-all-todos-params.interface';
+import logger from '@utils/logger';
 
 export class KnexTodoRepository implements TodoRepositoryInterface {
   constructor(protected readonly knex: Knex) { }
@@ -27,6 +28,25 @@ export class KnexTodoRepository implements TodoRepositoryInterface {
 
   async create(todo: TodoInput): Promise<number[]> {
     return await this.knex(dbTables.TODOS).insert({ ...todo }, ['id']);
+  }
+
+  async createWithLabel(todo: TodoInput, labelIds: Array<number>): Promise<number>{
+    const trx = await this.knex.transaction();
+
+    try {
+      const [todoId] = await trx(dbTables.TODOS).insert({ ...todo }, ['id']);
+
+      for (const labelId of labelIds) {
+        await trx(dbTables.LABEL_TODO).insert({ todoId, labelId });
+      }
+      
+      await trx.commit();
+
+      return todoId;
+    } catch (err) {
+      logger.error(err);
+      await trx.rollback();
+    }
   }
 
   async update(id: number, todo: TodoInput): Promise<boolean> {

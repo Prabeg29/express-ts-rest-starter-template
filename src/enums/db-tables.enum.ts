@@ -3,4 +3,5 @@
 export enum dbTables {
   LABELS = 'labels',
   TODOS = 'todos',
+  LABEL_TODO = 'label_todo'
 }
