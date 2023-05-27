@@ -27,14 +27,17 @@ export interface PaginationInfo {
   nextPage: number;
 }
 
-export const paginate = async <T>(queryBuilder: Knex.QueryBuilder, currentPage: number, perPage: number) => {
+export const paginate = async <T>(
+  queryBuilder: Knex.QueryBuilder,
+  { currentPage, perPage, selectParams, countParam }: {currentPage: number, perPage: number, selectParams: Array<string>, countParam: string}
+) => {
   if (currentPage < 1) {
     currentPage = 1;
   }
 
   const offSet = (currentPage - 1) * perPage;
-  const data = await queryBuilder.clone().limit(perPage).offset(offSet) as T[];
-  const total = (await queryBuilder.count('id as count').first()).count;
+  const data = await queryBuilder.clone().select(selectParams).limit(perPage).offset(offSet) as T[];
+  const total = (await queryBuilder.clone().count(`${countParam} as count`).first()).count;
   const lastPage = Math.ceil(total / perPage);
 
   const paginationInfo: PaginationInfo = {

@@ -1,11 +1,11 @@
 import { Knex } from 'knex';
 
-import { paginate, PaginationInfo } from '../../../database';
+import logger from '@utils/logger';
 import { dbTables } from '@enums/db-tables.enum';
-import { Todo, TodoInput } from '@modules/todos/todo.type';
+import { paginate, PaginationInfo } from '../../../database';
+import { Todo, TodoInput, TodoWithLabel } from '@modules/todos/todo.type';
 import { TodoRepositoryInterface } from './todo.repository.interface';
 import { getAllTodosParams } from '../interfaces/get-all-todos-params.interface';
-import logger from '@utils/logger';
 
 export class KnexTodoRepository implements TodoRepositoryInterface {
   constructor(protected readonly knex: Knex) { }
@@ -16,14 +16,36 @@ export class KnexTodoRepository implements TodoRepositoryInterface {
 
   async getAllPaginated(
     { currentPage, perPage, start, end }: getAllTodosParams): Promise<{
-    data: Todo[];
+    data: TodoWithLabel[];
     paginationInfo: PaginationInfo;
   }> {
-    const query = this.knex<Todo>(dbTables.TODOS)
-      .whereBetween('dueDate', [start, end])
-      .select();
+    const selectParams = [
+      `${dbTables.TODOS}.id`,
+      `${dbTables.TODOS}.title`,
+      `${dbTables.TODOS}.description`,
+      `${dbTables.TODOS}.dueDate`,
+      `${dbTables.TODOS}.isComplete`,
+      `${dbTables.TODOS}.createdAt`,
+      'subquery.labelId',
+      'subquery.labelName'
+    ];
 
-    return await paginate<Todo>(query, Number(currentPage), Number(perPage));
+    const labelSubquery = this.knex(dbTables.LABEL_TODO)
+      .join(dbTables.LABELS, `${dbTables.LABEL_TODO}.labelId`, `${dbTables.LABELS}.id`)
+      .select(`${dbTables.LABEL_TODO}.todoId`, `${dbTables.LABELS}.id as labelId`, `${dbTables.LABELS}.name as labelName`)
+      .as('subquery');
+
+    const todosWithLabels = this.knex(dbTables.TODOS)
+      .leftJoin(labelSubquery, `${dbTables.TODOS}.id`, 'subquery.todoId')
+      .whereBetween('dueDate', [start, end])
+      .orderBy('todos.createdAt', 'desc');
+
+    return await paginate<TodoWithLabel>(todosWithLabels, {
+      currentPage: Number(currentPage),
+      perPage    : Number(perPage),
+      selectParams,
+      countParam : `${dbTables.TODOS}.id`
+    });
   }
 
   async create(todo: TodoInput): Promise<number[]> {

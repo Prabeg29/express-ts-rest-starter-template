@@ -1,9 +1,9 @@
 export interface Label {
   id: number;
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
 }
 
 export type LabelInput = Omit<Label, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>;

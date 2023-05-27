@@ -1,8 +1,9 @@
 import config from '@config';
-import { Todo, TodoDto, TodoDtoCollection } from '@modules/todos/todo.type';
+import LabelMapper from '@modules/labels/label.mapper';
+import { TodoDto, TodoDtoCollection, TodoWithLabels } from '@modules/todos/todo.type';
 
 export default class TodoMapper {
-  public static toDto(todo: Todo): TodoDto {
+  public static toDto(todo: TodoWithLabels): TodoDto {
     return {
       id        : todo.id,
       attributes: {
@@ -11,12 +12,14 @@ export default class TodoMapper {
         isComplete : todo.isComplete,
         dueDate    : todo.dueDate?.toDateString(),
         createdAt  : todo.createdAt.toDateString(),
-        updatedAt  : todo.updatedAt.toDateString(),
+      },
+      relationships: {
+        labels: LabelMapper.toDtoCollection(todo.labels)
       }
     };
   }
 
-  public static toDtoCollection(todos: Todo[]): TodoDtoCollection {
+  public static toDtoCollection(todos: TodoWithLabels[]): TodoDtoCollection {
     return todos.map(todo => {
       return {
         ...TodoMapper.toDto(todo),

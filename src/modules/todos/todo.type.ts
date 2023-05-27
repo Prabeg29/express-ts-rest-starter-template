@@ -1,3 +1,5 @@
+import { Label, LabelDtoCollection } from '@modules/labels/label.type';
+
 export interface Todo {
   id: number;
   title: string;
@@ -7,6 +9,9 @@ export interface Todo {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type TodoWithLabel = Omit<Todo, 'updatedAt'> & { labelId: number; labelName: string }
+export type TodoWithLabels = Omit<Todo, 'updatedAt'> & { labels?: Array<Label> }
 
 export type TodoInput = Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>; 
 
@@ -18,8 +23,10 @@ export interface TodoDto {
     isComplete: boolean;
     dueDate: string;
     createdAt: string;
-    updatedAt: string;
   },
+  relationships: {
+    labels: LabelDtoCollection
+  }
 }
 
 export type TodoDtoCollection = TodoDto[];
