@@ -47,9 +47,13 @@ export class GetAllTodosUseCase {
     for (const row of rows.data) {
       const { id, title, description, dueDate, isComplete, createdAt, labelId, labelName } = row;
 
+      const label = labelId && labelName ? { id: labelId, name: labelName} : null; 
+
       if (todoMap.has(id)) {
         const todo = todoMap.get(id);
-        todo.labels.push({ id: labelId, name: labelName });
+        if (label) {
+          todo.labels.push(label);
+        }
       } else {
         const todo = {
           id,
@@ -58,8 +62,9 @@ export class GetAllTodosUseCase {
           dueDate,
           isComplete,
           createdAt,
-          labels: [{ id: labelId, name: labelName }],
+          labels: label ? [label] : [] 
         };
+
         todoMap.set(id, todo);
         res.push(todo);
       }

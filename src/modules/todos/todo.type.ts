@@ -10,7 +10,6 @@ export interface Todo {
   updatedAt: Date;
 }
 
-export type TodoWithLabel = Omit<Todo, 'updatedAt'> & { labelId: number; labelName: string }
 export type TodoWithLabels = Omit<Todo, 'updatedAt'> & { labels?: Array<Label> }
 
 export type TodoInput = Omit<Todo, 'id' | 'createdAt' | 'updatedAt'>; 

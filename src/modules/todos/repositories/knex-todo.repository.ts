@@ -2,11 +2,10 @@ import { Knex } from 'knex';
 
 import logger from '@utils/logger';
 import { dbTables } from '@enums/db-tables.enum';
+import { Todo, TodoInput } from '@modules/todos/todo.type';
 import { paginate, PaginationInfo } from '../../../database';
-import { Todo, TodoInput, TodoWithLabel } from '@modules/todos/todo.type';
 import { TodoRepositoryInterface } from './todo.repository.interface';
 import { getAllTodosParams } from '../interfaces/get-all-todos-params.interface';
-
 export class KnexTodoRepository implements TodoRepositoryInterface {
   constructor(protected readonly knex: Knex) { }
 
@@ -16,7 +15,7 @@ export class KnexTodoRepository implements TodoRepositoryInterface {
 
   async getAllPaginated(
     { currentPage, perPage, start, end }: getAllTodosParams): Promise<{
-    data: TodoWithLabel[];
+    data: Array<Todo & { labelId: number; labelName: string; }>;
     paginationInfo: PaginationInfo;
   }> {
     const selectParams = [
@@ -40,7 +39,7 @@ export class KnexTodoRepository implements TodoRepositoryInterface {
       .whereBetween('dueDate', [start, end])
       .orderBy('todos.createdAt', 'desc');
 
-    return await paginate<TodoWithLabel>(todosWithLabels, {
+    return await paginate<Todo & { labelId: number; labelName: string;}>(todosWithLabels, {
       currentPage: Number(currentPage),
       perPage    : Number(perPage),
       selectParams,

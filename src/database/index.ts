@@ -18,6 +18,13 @@ export const refreshDatabase = async () => {
 
 export default knexInstance;
 
+interface PaginateOptions {
+  currentPage: number;
+  perPage: number;
+  selectParams: Array<string>;
+  countParam: string;
+}
+
 export interface PaginationInfo {
   total: number;
   perPage: number;
@@ -29,8 +36,7 @@ export interface PaginationInfo {
 
 export const paginate = async <T>(
   queryBuilder: Knex.QueryBuilder,
-  { currentPage, perPage, selectParams, countParam }: {currentPage: number, perPage: number, selectParams: Array<string>, countParam: string}
-) => {
+  { currentPage, perPage, selectParams = ['*'], countParam = '*' }: PaginateOptions) => {
   if (currentPage < 1) {
     currentPage = 1;
   }
