@@ -45,7 +45,7 @@ describe('POST: /api/labels', () => {
     expect(response.body.message).toEqual('passion as label already exists');
   });
 
-  it.only('should create a new label resource', async () => {
+  it('should create a new label resource', async () => {
     response = await request(server)
       .post('/api/labels')
       .set('Accept', 'application/json')
